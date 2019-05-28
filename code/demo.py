@@ -13,15 +13,20 @@ headers = {"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 \
            (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.3"}
 driver_path = "C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe"
 
+#爬取状态与保存的参数设定
 source_url = 'https://www.zhihu.com/people/TechMonster'
-
 wait_q = queue.Queue()
 wait_q.put(source_url)
 completed_urls = []
 nums = 0
-
 forbid_times = 0
-browser = webdriver.Chrome(executable_path=driver_path)
+
+#设置代理 通过ssr 本地1080端口
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--proxy-server=http://127.0.0.1:1080')
+browser = webdriver.Chrome(executable_path=driver_path,chrome_options=chrome_options)
+
+#主爬取程序
 while not wait_q.empty():
     try:
         source_url = wait_q.get()
@@ -53,7 +58,7 @@ while not wait_q.empty():
             if url not in completed_urls:
                 wait_q.put(url)
         
-        print(wait_q.qsize())
+        print('the num of users in the wait queue:',wait_q.qsize(),'/n/n')
         
     except:
         time.sleep(20)
