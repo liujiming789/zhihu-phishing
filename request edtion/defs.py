@@ -10,6 +10,11 @@ headers = {"user-agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/53
 #使用1080端口的ssr代理，变成一个变相的代理池
 proxies={'https':'127.0.0.1:1080'}
 
+def Get_user_info(url):
+    user = url.split('/')[-1]
+    r = requests.get('https://api.zhihu.com/people/{user}'.format(user),headers=headers,proxies=proxies)
+    return r.json()
+
 def Get_folloeing(url,test_time=False):
     user = url.split('/')[-1]
     offset = 0
