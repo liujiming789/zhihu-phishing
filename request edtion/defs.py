@@ -10,12 +10,21 @@ headers = {"user-agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/53
 #使用1080端口的ssr代理，变成一个变相的代理池
 proxies={'https':'127.0.0.1:1080'}
 
-def Get_user_info(url):
+def Get_r(url):
+    while True:
+        try :
+            r = requests.get(url,headers=headers,proxies=proxies)
+            if r.status_code == 200:
+                return r
+        except:
+            pass
+
+def Get_user_info(url,visual=False):
     user = url.split('/')[-1]
-    r = requests.get('https://api.zhihu.com/people/{user}'.format(user),headers=headers,proxies=proxies)
+    r = Get_r('https://api.zhihu.com/people/{user}'.format(user=user))
     return r.json()
 
-def Get_folloeing(url,test_time=False):
+def Get_following(url,test_time=False):
     user = url.split('/')[-1]
     offset = 0
     Followings = []
@@ -26,12 +35,7 @@ def Get_folloeing(url,test_time=False):
                     include=data%5B*%5D.answer_count%2Carticles_count%2Cgender%2Cfollower_count%2Cis_followed\
                     %2Cis_following%2Cbadge%5B%3F(type%3Dbest_answerer)%5D.topics&offset={offset}&limit=20".format(user=user,\
                                                                                                                    offset=offset)
-        while True:
-            try:
-                r = requests.get(following_,headers=headers,proxies = proxies)
-                break
-            except:
-                pass
+        r = Get_r(following_)
         for d in r.json()['data']:
             Followings.append(d)
 
@@ -41,74 +45,86 @@ def Get_folloeing(url,test_time=False):
     
     end_t = time.time()
     if test_time:
+        print('prase following')
         take_t = round(end_t-start_t,2)
         print('time %.2f s:'%take_t)
         print('time %.2f min:'%(take_t/60))
     
     return Followings
 
-def Get_Activities(url,test_time=False,visual=False):
+def Get_Activities(url,test_time=False,visual=False,limit=10**6):
     Activities = []    
     '''
     第二页activities ，实际上前面只有两个activities，但是重新申请一次previous时，由于limit是7，会覆盖掉这个json包，所以这个要舍弃
     重新从第一个个 next
     '''
     start_t = time.time()
-    while True:
-        try:
-            r = requests.get(url,headers=headers,proxies = proxies)
-            pattern = r'activities\?limit=7&session_id=[0-9]+&after_id=[0-9]+&desktop=True'
-            first_activ = re.findall(pattern,str(r.text))[0]
-            activ_url = 'https://www.zhihu.com/api/v4/members/'+url.split('/')[-1]+'/'+first_activ
-            r = requests.get(activ_url,headers=headers,proxies = proxies)
-            
-             #获取第一页activities
-            previous_act_url = ' '
-            while r.json()['paging']['previous'] != previous_act_url:
-                print(r.json()['paging']['previous'])
-                previous_act_url = r.json()['paging']['previous']
-                r = requests.get(previous_act_url,headers=headers,proxies = proxies)
-                
-            break
-        except:
-            pass
+    
+    r = Get_r(url)
+    pattern = r'activities\?limit=7&session_id=[0-9]+&after_id=[0-9]+&desktop=True'
+    first_activ = re.findall(pattern,str(r.text))[0]
+    activ_url = 'https://www.zhihu.com/api/v4/members/'+url.split('/')[-1]+'/'+first_activ
+    r = Get_r(activ_url)
+    
+     #获取第一页activities
+    previous_act_url = ' '
+    while r.json()['paging']['previous'] != previous_act_url:
+        if visual:
+            print(r.json()['paging']['previous'])
+        previous_act_url = r.json()['paging']['previous']
+        r = Get_r(previous_act_url)
 
     num_act = 0
-    kinds_act = []
     for j in r.json()['data']:
         num_act += 1
         if visual:
             print(num_act,j['action_text'])
-        kinds_act.append(j['action_text'])
         Activities.append(j)
-
-    while r.json()['paging']['is_end'] == 0:
+    # next 获取activities
+    while True:
         try:
             activ_next_url = r.json()['paging']['next']
-            r = requests.get(activ_next_url,headers=headers,proxies = proxies)
-            for j in r.json()['data']:
+            r_ = Get_r(activ_next_url)
+
+            if visual:
+                print(activ_next_url)
+                print(len(r_.json()['data']))
+            for j in r_.json()['data']:
                 num_act += 1
+                Activities.append(j)
+
                 if visual:
                     print(num_act,j['action_text'])
-                kinds_act.append(j['action_text'])
-                Activities.append(j)
-                '''
-                text = BeautifulSoup(j['target']['content'],'lxml')
-                for p in text.find_all('p'):
-                    print(p.text)
-                '''
+                if len(Activities) > limit or r_.json()['paging']['is_end'] == 1:
+                    break
+            r = r_
         except:
             pass
-
-    '''
-    result = {}
-    for i in set(kinds_act):
-        result[i] = kinds_act.count(i)
-    print(result)
-    '''
+            '''
+            text = BeautifulSoup(j['target']['content'],'lxml')
+            for p in text.find_all('p'):
+                print(p.text)
+            '''
     end_t = time.time()
     if test_time:
+        print('prase activitties')
         take_t = round(end_t-start_t,2)
         print('time %.2f s:'%take_t)
         print('time %.2f min:'%(take_t/60))
     return Activities
+
+def Prase_user(url,visual=False,act_limit=10**6):
+    res = {}
+    user = url.split('/')[-1]
+    if visual:
+        F = Get_following(url,1)
+        Activities = Get_Activities(url,1,1,limit=act_limit)
+        info = Get_user_info(url)
+    else:
+        F = Get_following(url)
+        Activities = Get_Activities(url,limit=act_limit)
+        info = Get_user_info(url)
+    res['following'] = F
+    res['activities'] = Activities
+    res['info'] = info
+    return user,res
