@@ -47,7 +47,7 @@ while True:
 
 	except Exception as e:
 		print(e)
-		send_email('Exception'+str(e))
+		send_email('demo stopped\n'+'Exception'+str(e))
 		del Wait_q[0]
 		pass
 
