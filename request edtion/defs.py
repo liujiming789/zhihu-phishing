@@ -95,8 +95,9 @@ def Get_Activities(url,test_time=False,visual=False,limit=10**6):
 
                 if visual:
                     print(num_act,j['action_text'])
-                if len(Activities) > limit or r_.json()['paging']['is_end'] == 1:
-                    break
+            
+            if len(Activities) > limit or r_.json()['paging']['is_end'] == 1:
+                break
             r = r_
         except:
             pass
