@@ -101,11 +101,6 @@ def Get_Activities(url,test_time=False,visual=False,limit=10**6):
             r = r_
         except:
             pass
-            '''
-            text = BeautifulSoup(j['target']['content'],'lxml')
-            for p in text.find_all('p'):
-                print(p.text)
-            '''
     end_t = time.time()
     if test_time:
         print('prase activitties')
@@ -114,7 +109,7 @@ def Get_Activities(url,test_time=False,visual=False,limit=10**6):
         print('time %.2f min:'%(take_t/60))
     return Activities
 
-def Prase_user(url,visual=False,act_limit=10**6):
+def Prase_user(url,test_time=False,visual=False,act_limit=10**6):
     res = {}
     user = url.split('/')[-1]
     if visual:
@@ -129,3 +124,8 @@ def Prase_user(url,visual=False,act_limit=10**6):
     res['activities'] = Activities
     res['info'] = info
     return user,res
+
+def Get_act_text(act):
+    text = BeautifulSoup(act['target']['content'],'lxml')
+    for p in text.find_all('p'):
+        print(p.text)

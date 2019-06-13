@@ -33,10 +33,13 @@ except:
 
 while True:
 	start_t = time.time()
+	test_time = 1
+	viaual = False
+	act_limit = 1000
 	try:
 		token = Wait_q[0]
 		url = 'https://www.zhihu.com/people/'+token
-		user,res = Prase_user(url,1,act_limit=1000)
+		user,res = Prase_user(url,test_time=test_time,viaual=viaual,1,act_limit=act_limit)
 
 		User_data[user] = res
 		for u in User_data[user]['following']:
@@ -53,6 +56,6 @@ while True:
 
 	end_t = time.time()
 	print('\n',len(Completed),'th user cost',round((end_t-start_t)/60,2),'min','\n'*10)
-	if(len(Completed)>100):
+	if(len(Completed)>150):
 		break
 Save_data(User_data,Completed,Wait_q)
