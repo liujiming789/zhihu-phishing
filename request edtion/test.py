@@ -31,12 +31,16 @@ except:
 	Wait_q = []
 	wait_q.append(Fir_token)
 
+#parameters
+test_time = True
+viaual = False
+act_limit = 1000
+
+
 while True:
 	start_t = time.time()
-	test_time = True
-	viaual = False
-	act_limit = 1000
 	try:
+		success = True
 		token = Wait_q[0]
 		print(token,len(Wait_q))
 		url = 'https://www.zhihu.com/people/'+token
@@ -50,13 +54,15 @@ while True:
 		Completed.append(user)
 
 	except Exception as e:
-		print(e)
-		send_email('demo stopped\n'+'Exception'+str(e))
+		print(e,'\n'*2)
+		#send_email('demo stopped\n'+'Exception'+str(e))
 		del Wait_q[0]
+		success = False
 		pass
 
-	end_t = time.time()
-	print('\n',len(Completed),'th user cost',round((end_t-start_t)/60,2),'min','\n')
-	if(len(Completed)>150):
-		break
+	if success:
+		end_t = time.time()
+		print('\n',len(Completed),'th user cost',round((end_t-start_t)/60,2),'min','\n'*2)
+		if(len(Completed)>120):
+			break
 Save_data(User_data,Completed,Wait_q)

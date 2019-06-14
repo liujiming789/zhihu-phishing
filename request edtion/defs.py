@@ -45,10 +45,10 @@ def Get_following(url,test_time=False):
     
     end_t = time.time()
     if test_time:
-        print('prase following')
+        print('prase',len(Followings),'following')
         take_t = round(end_t-start_t,2)
-        print('time %.2f s:'%take_t)
-        print('time %.2f min:'%(take_t/60))
+        #print('time %.2f s:'%take_t)
+        print('time %.2f min:'%(take_t/60),'\n')
     
     return Followings
 
@@ -103,10 +103,10 @@ def Get_Activities(url,test_time=False,visual=False,limit=10**6):
             pass
     end_t = time.time()
     if test_time:
-        print('prase activitties')
+        print('prase',len(Activities),'activitties')
         take_t = round(end_t-start_t,2)
-        print('time %.2f s:'%take_t)
-        print('time %.2f min:'%(take_t/60))
+        #print('time %.2f s:'%take_t)
+        print('time %.2f min:'%(take_t/60),'\n')
     return Activities
 
 def Prase_user(url,test_time=False,visual=False,act_limit=10**6):
