@@ -46,6 +46,16 @@ while True:
 		url = 'https://www.zhihu.com/people/'+token
 
 		#判断用户合法
+		'''
+		another way:
+		r = Get_r(url)
+		soup = BeautifulSoup(r.text,'lxml')
+		p_ = soup.find_all('p')
+		if len(p_) == 0:
+		    exist = False
+		    success = False
+		    del Wait_q[0]
+		'''
 		exist = True
 		r = Get_r(url)
 		if len(re.findall(token,r.text))>0:
