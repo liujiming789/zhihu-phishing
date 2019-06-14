@@ -112,14 +112,9 @@ def Get_Activities(url,test_time=False,visual=False,limit=10**6):
 def Prase_user(url,test_time=False,visual=False,act_limit=10**6):
     res = {}
     user = url.split('/')[-1]
-    if visual:
-        F = Get_following(url,1)
-        Activities = Get_Activities(url,1,1,limit=act_limit)
-        info = Get_user_info(url)
-    else:
-        F = Get_following(url)
-        Activities = Get_Activities(url,limit=act_limit)
-        info = Get_user_info(url)
+    F = Get_following(url,test_time=test_time)
+    Activities = Get_Activities(url,test_time=test_time,visual=visual,limit=act_limit)
+    info = Get_user_info(url)
     res['following'] = F
     res['activities'] = Activities
     res['info'] = info
