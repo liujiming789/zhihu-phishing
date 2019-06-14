@@ -46,19 +46,9 @@ while True:
 		url = 'https://www.zhihu.com/people/'+token
 
 		#判断用户合法
-		'''
-		another way:
-		r = Get_r(url)
-		soup = BeautifulSoup(r.text,'lxml')
-		p_ = soup.find_all('p')
-		if len(p_) == 0:
-		    exist = False
-		    success = False
-		    del Wait_q[0]
-		'''
 		exist = True
 		r = Get_r(url)
-		if len(re.findall(token,r.text))>0:
+		if len(re.findall(token,r.text)) == 0:
 			exist = False
 			success = False
 			del Wait_q[0]
@@ -83,6 +73,6 @@ while True:
 	if success:
 		end_t = time.time()
 		print('\n',len(Completed),'th user cost',round((end_t-start_t)/60,2),'min','\n'*2)
-		if(len(Completed)>120):
+		if(len(Completed)>150):
 			break
 Save_data(User_data,Completed,Wait_q)
