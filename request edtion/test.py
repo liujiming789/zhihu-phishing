@@ -42,16 +42,26 @@ while True:
 	try:
 		success = True
 		token = Wait_q[0]
-		print(token,len(Wait_q))
+		print(token,'Completed',len(Completed),'Wait_q',len(Wait_q))
 		url = 'https://www.zhihu.com/people/'+token
-		user,res = Prase_user(url,test_time=test_time,visual=viaual,act_limit=act_limit)
 
-		User_data[user] = res
-		for u in User_data[user]['following']:
-			if u['url_token'] not in Wait_q and u['url_token'] not in Completed:
-				Wait_q.append(u['url_token'])
-		del Wait_q[0]
-		Completed.append(user)
+		#判断用户合法
+		exist = True
+		r = Get_r(url)
+		if len(re.findall(token,r.text))>0:
+			exist = False
+			success = False
+			del Wait_q[0]
+
+		if exist:
+			user,res = Prase_user(url,test_time=test_time,visual=viaual,act_limit=act_limit)
+
+			User_data[user] = res
+			for u in User_data[user]['following']:
+				if u['url_token'] not in Wait_q and u['url_token'] not in Completed:
+					Wait_q.append(u['url_token'])
+			del Wait_q[0]
+			Completed.append(user)
 
 	except Exception as e:
 		print(e,'\n'*2)
