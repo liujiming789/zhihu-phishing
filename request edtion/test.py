@@ -73,6 +73,6 @@ while True:
 	if success:
 		end_t = time.time()
 		print('\n',len(Completed),'th user cost',round((end_t-start_t)/60,2),'min','\n'*2)
-		if(len(Completed)>150):
+		if(len(Completed)>200):
 			break
 Save_data(User_data,Completed,Wait_q)
