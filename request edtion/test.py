@@ -54,7 +54,7 @@ while True:
 			del Wait_q[0]
 
 		if exist:
-			user,res = Prase_user(url,test_time=test_time,visual=viaual,act_limit=act_limit)
+			user,res = Parse_user(url,test_time=test_time,visual=viaual,act_limit=act_limit)
 
 			User_data[user] = res
 			for u in User_data[user]['following']:

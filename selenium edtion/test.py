@@ -32,26 +32,26 @@ while not wait_q.empty():
         source_url = wait_q.get()
         '''
         #about himself
-        Prase_user(source_url,browser)
-        Prase_answers(source_url,browser)
-        Prase_asks(source_url,browser)
-        Prase_posts(source_url,browser)
-        Prase_columns(source_url,browser)
-        Prase_pins(source_url,browser)
+        Parse_user(source_url,browser)
+        Parse_answers(source_url,browser)
+        Parse_asks(source_url,browser)
+        Parse_posts(source_url,browser)
+        Parse_columns(source_url,browser)
+        Parse_pins(source_url,browser)
         
         #about social network following
-        Prase_following(source_url,browser)
-        Prase_follower(source_url,browser)
-        Prase_follow_topics(source_url,browser)
-        Prase_follow_columns(source_url,browser)
-        Prase_follow_questions(source_url,browser)
+        Parse_following(source_url,browser)
+        Parse_follower(source_url,browser)
+        Parse_follow_topics(source_url,browser)
+        Parse_follow_columns(source_url,browser)
+        Parse_follow_questions(source_url,browser)
         '''
         print(nums+1)
-        Prase_user(source_url,browser)
+        Parse_user(source_url,browser)
         nums += 1
         if nums>100:
             break
-        follow = Prase_following(source_url,browser)
+        follow = Parse_following(source_url,browser)
         completed_urls.append(source_url)
         
         for url in follow:

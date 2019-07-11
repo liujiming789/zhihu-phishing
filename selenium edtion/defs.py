@@ -10,7 +10,7 @@ headers = {"user-agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/53
 driver_path = "C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe"
 
 #用户简介
-def Prase_user(source_url,browser):
+def Parse_user(source_url,browser):
     browser.get(source_url)
     browser.find_element_by_xpath('//button[@class="Button ProfileHeader-expandButton Button--plain"]').click()
     html = browser.page_source
@@ -43,7 +43,7 @@ def Get_Answer(answer_url,browser):
     for p in s[0].find_all('p'):
         print(p.text)
 
-def Prase_answers(source_url,browser):        
+def Parse_answers(source_url,browser):        
     answer_url = source_url+'/answers'
     r = requests.get(answer_url,headers=headers)
     soup = BeautifulSoup(r.text,'lxml')
@@ -71,7 +71,7 @@ def Prase_answers(source_url,browser):
 
 
 #asks 提问
-def Prase_asks(source_url,browser):
+def Parse_asks(source_url,browser):
     asks_url = source_url+'/asks'
     r = requests.get(asks_url,headers=headers)
     soup = BeautifulSoup(r.text,'lxml')
@@ -97,7 +97,7 @@ def Prase_asks(source_url,browser):
 
 
 #posts 文章
-def Prase_posts(source_url,browser):
+def Parse_posts(source_url,browser):
     posts_url = source_url+'/posts'
     r = requests.get(posts_url,headers=headers)
     soup = BeautifulSoup(r.text,'lxml')
@@ -123,7 +123,7 @@ def Prase_posts(source_url,browser):
     
 
 #columns 专栏
-def Prase_columns(source_url,browser):
+def Parse_columns(source_url,browser):
     columns_url = source_url+'/columns'
     r = requests.get(columns_url,headers=headers)
     soup = BeautifulSoup(r.text,'lxml')
@@ -149,7 +149,7 @@ def Prase_columns(source_url,browser):
     #browser.quit()
 
 # pins 想法
-def Prase_pins(source_url,browser):
+def Parse_pins(source_url,browser):
     pins_url = source_url + '/pins'
     r = requests.get(pins_url,headers=headers)
     soup = BeautifulSoup(r.text,'lxml')
@@ -176,7 +176,7 @@ def Prase_pins(source_url,browser):
 
     
 #following 他关注的人
-def Prase_following(source_url,browser):
+def Parse_following(source_url,browser):
     following_url = source_url+'/following'
     r = requests.get(following_url,headers=headers)
     soup = BeautifulSoup(r.text,'lxml')
@@ -207,7 +207,7 @@ def Prase_following(source_url,browser):
 
 
 #follower 关注他的人
-def Prase_follower(source_url,browser):
+def Parse_follower(source_url,browser):
     follower_url = source_url+'/followers'
     r = requests.get(follower_url,headers=headers)
     soup = BeautifulSoup(r.text,'lxml')
@@ -232,7 +232,7 @@ def Prase_follower(source_url,browser):
 
 
 #fellow topics 话题
-def Prase_follow_topics(source_url,browser):
+def Parse_follow_topics(source_url,browser):
     topics_url = source_url+'/following/topics'
     r = requests.get(topics_url,headers=headers)
     soup = BeautifulSoup(r.text,'lxml')
@@ -258,7 +258,7 @@ def Prase_follow_topics(source_url,browser):
 
 
 #fellow columns 专栏
-def Prase_follow_columns(source_url,browser):
+def Parse_follow_columns(source_url,browser):
     columns_url = source_url+'/following/columns'
     r = requests.get(columns_url,headers=headers)
     soup = BeautifulSoup(r.text,'lxml')
@@ -282,7 +282,7 @@ def Prase_follow_columns(source_url,browser):
     #browser.quit()# -*- coding: utf-8 -*-
 
 #fellow questions
-def Prase_follow_questions(source_url,browser):
+def Parse_follow_questions(source_url,browser):
     questions_url = source_url+'/following/questions'
     r = requests.get(questions_url,headers=headers)
     print(r)
@@ -315,21 +315,21 @@ if __name__ == '__main__' :
     try:
         '''
         #about himself
-        Prase_user(source_url,browser)
-        Prase_answers(source_url,browser)
-        Prase_asks(source_url,browser)
-        Prase_posts(source_url,browser)
-        Prase_columns(source_url,browser)
-        Prase_pins(source_url,browser)
+        Parse_user(source_url,browser)
+        Parse_answers(source_url,browser)
+        Parse_asks(source_url,browser)
+        Parse_posts(source_url,browser)
+        Parse_columns(source_url,browser)
+        Parse_pins(source_url,browser)
         
         #about social network following
-        Prase_following(source_url,browser)
-        Prase_follower(source_url,browser)
-        Prase_follow_topics(source_url,browser)
-        Prase_follow_columns(source_url,browser)
-        Prase_follow_questions(source_url,browser)
+        Parse_following(source_url,browser)
+        Parse_follower(source_url,browser)
+        Parse_follow_topics(source_url,browser)
+        Parse_follow_columns(source_url,browser)
+        Parse_follow_questions(source_url,browser)
         '''
-        Prase_columns(source_url,browser)
+        Parse_columns(source_url,browser)
         
     except:
         pass
